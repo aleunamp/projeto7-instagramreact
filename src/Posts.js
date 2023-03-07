@@ -1,34 +1,39 @@
-import React from "react"
+import { useState } from "react";
+
 
 function Post(props) {
-    const [bookmark, setBookmark] = React.useState("bookmark-outline")
-    const [heart, setHeart] = React.useState("heart-outline")
-    const [colorHeart, setColorHeart] = React.useState("disliked")
-    const [contador1, setContador1] = React.useState(props.numcurtidas)
-    const [contador2, setContador2] = React.useState(0)
+    const {
+        userName,
+        userImage,
+        contentImage,
+        likedByImage,
+        likedByText,
+        initialLikesAmount,
+        isSaved,
+        isLiked,
+    } = props;
 
-    function like() {
-        setContador1(Number(props.numcurtidas))
+    const [saved, setSaved] = useState(isSaved);
+    const [liked, setLiked] = useState(isLiked);
+    const [counter, setCounter] = useState(initialLikesAmount);
 
-        if (contador1 == props.numcurtidas) {
-            setHeart("heart")
-            setColorHeart("liked")
-            setContador1(Number(contador1) + 1)
-        }
-        else {
-            setHeart("heart-outline")
-            setColorHeart("disliked")
-            setContador1(Number(contador1) - 1)
-        }
+    function changeBookmark() {
+        setSaved(!saved);
     }
 
-    function salvo() {
-        if (contador2 === 0){
-        setBookmark("bookmark")
-        setContador2(contador2 + 1)
-    } else {
-            setBookmark("bookmark-outline")
-            setContador2(contador2 - 1)
+    function changeLike() {
+        if (!liked) {
+            setCounter(counter + 1);
+        } else {
+            setCounter(counter - 1);
+        }
+        setLiked(!liked);
+    }
+
+    function changeLikeImage() {
+        if (!liked) {
+            setLiked(true);
+            setCounter(counter + 1);
         }
     }
 
@@ -36,39 +41,42 @@ function Post(props) {
         <div class="post">
             <div class="topo">
                 <div class="usuario">
-                    <img src={props.imagemusuariodopost} alt={props.imagemusuariodopost}/>
-                    {props.usuariodopost}
+                    <img src={userImage} />
+                    {userName}
                 </div>
                 <div class="acoes">
                     <ion-icon name="ellipsis-horizontal"></ion-icon>
                 </div>
             </div>
 
-            <div class="conteudo">
-                <img src={props.foto} alt={props.foto}/>
+            <div class="conteudo" onClick={changeLikeImage}>
+                <img src={contentImage} />
             </div>
 
             <div class="fundo">
                 <div class="acoes">
                     <div>
-                        <ion-icon
-                            name={heart} class={colorHeart}
-                            onClick={like}
-                        ></ion-icon>
+                        {liked ? (
+                            <ion-icon onClick={changeLike} class="liked" name="heart"></ion-icon>
+                        ) : (
+                            <ion-icon onClick={changeLike} name="heart-outline"></ion-icon>
+                        )}
                         <ion-icon name="chatbubble-outline"></ion-icon>
                         <ion-icon name="paper-plane-outline"></ion-icon>
                     </div>
                     <div>
-                        <ion-icon onClick={salvo}
-                            name={bookmark}
-                        ></ion-icon>
+                        {saved ? (
+                            <ion-icon onClick={changeBookmark} name="bookmark"></ion-icon>
+                        ) : (
+                            <ion-icon onClick={changeBookmark} name="bookmark-outline"></ion-icon>
+                        )}
                     </div>
                 </div>
 
                 <div class="curtidas">
-                    <img src={props.imagemusuariocurtida} alt={props.imagemusuariocurtida}/>
+                    <img src={likedByImage} />
                     <div class="texto">
-                        Curtido por <strong>{props.usuariocurtida}</strong> e <strong>outras {contador1} pessoas</strong>
+                        Curtido por <strong>{likedByText}</strong> e <strong>outras {counter} pessoas</strong>
                     </div>
                 </div>
             </div>
@@ -80,20 +88,41 @@ function Post(props) {
 
 export default function Posts() {
     const post = [
-        { imagemusuariodopost: "./meowed.svg", usuariodopost: "meowed", foto: "./gato-telefone.svg", imagemusuariocurtida: "./respondeai.svg", usuariocurtida: "respondeai", numcurtidas: "101523" },
-        { imagemusuariodopost: "./barked.svg", usuariodopost: "barked", foto: "./dog.svg", imagemusuariocurtida: "./adorable_animals.svg", usuariocurtida: "adorable_animals", numcurtidas: "200541" }
+        {
+            userName: "meowed",
+            userImage: "./meowed.svg",
+            contentImage: "./gato-telefone.svg",
+            likedByImage: "./respondeai.svg",
+            likedByText: "respondeai",
+            initialLikesAmount: 101523,
+            isSaved: false,
+            isLiked: false
+        },
+        {
+            userName: "barked",
+            userImage: "./barked.svg",
+            contentImage: "./dog.svg",
+            likedByImage: "./adorable_animals.svg",
+            likedByText: "adorable_animals",
+            initialLikesAmount: 200541,
+            isSaved: true,
+            isLiked: true
+        }
     ]
     console.log(post)
 
     return (
         <div class="posts">
             {post.map((p) => <Post
-                imagemusuariodopost={p.imagemusuariodopost}
-                usuariodopost={p.usuariodopost}
-                foto={p.foto}
-                imagemusuariocurtida={p.imagemusuariocurtida}
-                usuariocurtida={p.usuariocurtida}
-                numcurtidas={p.numcurtidas} />)}
+                userName={p.userName}
+                userImage={p.userImage}
+                contentImage={p.contentImage}
+                likedByImage={p.likedByImage}
+                likedByText={p.likedByText}
+                initialLikesAmount={p.initialLikesAmount}
+                isSaved={p.isSaved}
+                isLiked={p.isLiked}
+            />)}
         </div>
     )
 }

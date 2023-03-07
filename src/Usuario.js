@@ -1,36 +1,36 @@
-import React from "react"
+import React from "react";
 
-function Perfil(props){
-    const [nome, setNome] = React.useState(props.nome)
-    const [foto, setFoto] = React.useState(props.imagem)
+function Perfil(props) {
+    const [name, setName] = React.useState(props.name);
+    const [photo, setPhoto] = React.useState(props.image);
 
-    function novoNome(){
-        const nomePrompt = prompt("Digite o seu novo nome:")
-            setNome(nomePrompt)
+    function newName() {
+        const promptName = prompt("Digite o seu novo nome:")
+        setName(promptName);
     }
 
-    function novaFoto(){
-        const fotoPrompt = prompt("Digite o link da sua nova foto:")
-        setFoto(fotoPrompt)
+    function newPhoto() {
+        const promptPhoto = prompt("Digite o link da sua nova foto:");
+        setPhoto(promptPhoto);
     }
 
     return (
         <div class="usuario">
-        <img onClick={novaFoto} src={(foto === "" || foto === null) ? props.imagem : foto} alt={(foto === "" || foto === null) ? props.imagem : foto}/>
-        <div class="texto">
-            <strong>{props.usuario}</strong>
-            <span>
-                {(nome === "" || nome === null) ? props.nome : nome}
-                <ion-icon onClick={novoNome} name="pencil"></ion-icon>
-            </span>
+            <img onClick={newPhoto} src={(photo === "" || photo === null) ? props.image : photo} alt={(photo === "" || photo === null) ? props.image : photo} />
+            <div class="texto">
+                <strong>{props.user}</strong>
+                <span>
+                    {(name === "" || name === null) ? props.name : name}
+                    <ion-icon onClick={newName} name="pencil"></ion-icon>
+                </span>
+            </div>
         </div>
-    </div>
     )
 }
 
 
-export default function Usuario(){
+export default function Usuario() {
     return (
-        <Perfil imagem = "./catanacomics.svg" usuario = "catanacomics" nome = "Catana"/>
+        <Perfil image="./catanacomics.svg" user="catanacomics" name="Catana" />
     )
 }
